@@ -1,20 +1,18 @@
-version: '3.7'
+version: '3'
+
 services:
-  app:
-    build: .
-    ports:
-      - 443:443
-    volumes:
-      - .:/var/www/html
-  ftp-server:
-    image: stilliard/pure-ftpd:latest
+  ftp:
+    image: stilliard/pure-ftpd:hardened
+    container_name: pure-ftpd
     ports:
       - "21:21"
       - "30000-30009:30000-30009"
     volumes:
-      - ./ftp/data:/home/ftpusers
+      - "./data:/home"
+      - "./passwd:/etc/pure-ftpd/passwd"
     environment:
-      - PUBLICHOST=ftp-server
-      - FTP_USER_NAME=ftp_user
-      - FTP_USER_PASS=ftp_password
-      - FTP_USER_HOME=/home/ftpusers
+      PUBLICHOST: "localhost"
+      FTP_USER_NAME: username
+      FTP_USER_PASS: mypass
+      FPT_USER_HOME: /home/username
+    command: /run.sh -l puredb:/etc/pure-ftpd/pureftpd.pdb -E -j -R -P localhost -s -A -j -Z -H -4 -E -R -X -x
