@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  app:
+    build: .
+    ports:
+      - 443:443
+    volumes:
+      - .:/var/www/html
+  ftp-server:
+    image: stilliard/pure-ftpd:latest
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    volumes:
+      - ./ftp/data:/home/ftpusers
+    environment:
+      - PUBLICHOST=ftp-server
+      - FTP_USER_NAME=ftp_user
+      - FTP_USER_PASS=ftp_password
+      - FTP_USER_HOME=/home/ftpusers
