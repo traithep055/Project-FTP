@@ -1,6 +1,15 @@
 version: '3'
-
 services:
+  php:
+    container_name: php-apache-1
+    # image: php:7.3-apache
+    build: .
+    volumes:
+      - ./php:/var/www/html/
+    ports:
+      - 8000:80
+    depends_on:
+      - ftp
   ftp:
     image: stilliard/pure-ftpd:hardened
     container_name: pure-ftpd
